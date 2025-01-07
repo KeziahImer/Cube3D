@@ -1,6 +1,8 @@
 use std::f32::consts::PI;
 use crate::terminal::Terminal;
 
+const CAMERA_DISTANCE: f32 = 2.0;
+
 struct Point2D {
     x: f32,
     y: f32,
@@ -38,18 +40,18 @@ impl Cube {
                 Point2D { x: 0.0, y: 0.0 },
             ],
             vertices_3d: vec![
-                Point3D { x: -1.0, y: -1.0, z: 5.0 },
-                Point3D { x:  1.0, y: -1.0, z: 5.0 },
-                Point3D { x:  1.0, y:  1.0, z: 5.0 },
-                Point3D { x: -1.0, y:  1.0, z: 5.0 },
-                Point3D { x: -1.0, y: -1.0, z: 6.0 },
-                Point3D { x:  1.0, y: -1.0, z: 6.0 },
-                Point3D { x:  1.0, y:  1.0, z: 6.0 },
-                Point3D { x: -1.0, y:  1.0, z: 6.0 },
+                Point3D { x: -1.0, y: -1.0, z: -1.0 },
+                Point3D { x:  1.0, y: -1.0, z: -1.0 },
+                Point3D { x:  1.0, y:  1.0, z: -1.0 },
+                Point3D { x: -1.0, y:  1.0, z: -1.0 },
+                Point3D { x: -1.0, y: -1.0, z:  1.0 },
+                Point3D { x:  1.0, y: -1.0, z:  1.0 },
+                Point3D { x:  1.0, y:  1.0, z:  1.0 },
+                Point3D { x: -1.0, y:  1.0, z:  1.0 },
             ],
             rotation: Rotation {
-                x: 0.0,
-                y: PI / 180.0,
+                x: PI / 180.0,
+                y: PI / 90.0,
                 z: 0.0,
             }
         }
@@ -64,16 +66,6 @@ impl Cube {
         terminal.clear();
         self.draw(terminal);
         terminal.flush();
-
-        // println!("Rendering 3D...");
-        // for vertex in self.vertices_3d.iter() {
-        //     println!("x: {}, y: {}, z: {}", vertex.x, vertex.y, vertex.z);
-        // }
-        // println!("Rendering 2D...");
-        // for vertex in self.vertices_2d.iter() {
-        //     println!("x: {}, y: {}", vertex.x, vertex.y);
-        // }
-        // println!("");
     }
 
     fn rotate(&mut self) {
@@ -115,8 +107,8 @@ impl Cube {
             if z == 0.0 {
                 z = 0.0001;
             }
-            let x = vertex.x / z;
-            let y = vertex.y / z;
+            let x = vertex.x / (z + CAMERA_DISTANCE);
+            let y = vertex.y / (z + CAMERA_DISTANCE);
 
             self.vertices_2d[i] = Point2D { x, y };
         }
