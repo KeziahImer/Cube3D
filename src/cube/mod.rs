@@ -67,14 +67,17 @@ impl Cube {
                 (3, 7),
             ],
             rotation: Rotation {
-                x: PI / 180.0,
+                x: PI / 360.0,
                 y: PI / 360.0,
-                z: 0.0,
+                z: PI / 360.0,
             }
         }
     }
 
     pub fn update(&mut self) {
+        self.rotation.x += 0.000003;
+        self.rotation.y += 0.000002;
+        self.rotation.z += 0.000001;
         self.rotate();
         self.project();
     }
@@ -130,50 +133,31 @@ impl Cube {
     }
 
     fn draw_vertices(&self, terminal: &Terminal) {
-        for (i, vertex) in self.vertices_2d.iter().enumerate() {
-            terminal.draw(vertex.x, vertex.y, self.vertices_3d[i].z);
+        for vertex in self.vertices_2d.iter() {
+            terminal.draw(vertex.x, vertex.y, '*');
         }
     }
 
     fn draw_edges(&self, terminal: &Terminal) {
-        self.draw_edge(terminal, self.edges[0].0, self.edges[0].1);
-        self.draw_edge(terminal, self.edges[1].0, self.edges[1].1);
-        self.draw_edge(terminal, self.edges[2].0, self.edges[2].1);
-        self.draw_edge(terminal, self.edges[3].0, self.edges[3].1);
-        self.draw_edge(terminal, self.edges[4].0, self.edges[4].1);
-        self.draw_edge(terminal, self.edges[5].0, self.edges[5].1);
-        self.draw_edge(terminal, self.edges[6].0, self.edges[6].1);
-        self.draw_edge(terminal, self.edges[7].0, self.edges[7].1);
-        self.draw_edge(terminal, self.edges[8].0, self.edges[8].1);
-        self.draw_edge(terminal, self.edges[9].0, self.edges[9].1);
-        self.draw_edge(terminal, self.edges[10].0, self.edges[10].1);
-        self.draw_edge(terminal, self.edges[11].0, self.edges[11].1);
+        self.draw_edge(terminal, self.edges[0].0, self.edges[0].1, '#');
+        self.draw_edge(terminal, self.edges[1].0, self.edges[1].1, '#');
+        self.draw_edge(terminal, self.edges[2].0, self.edges[2].1, '#');
+        self.draw_edge(terminal, self.edges[3].0, self.edges[3].1, '#');
+        self.draw_edge(terminal, self.edges[4].0, self.edges[4].1, '$');
+        self.draw_edge(terminal, self.edges[5].0, self.edges[5].1, '$');
+        self.draw_edge(terminal, self.edges[6].0, self.edges[6].1, '$');
+        self.draw_edge(terminal, self.edges[7].0, self.edges[7].1, '$');
+        self.draw_edge(terminal, self.edges[8].0, self.edges[8].1, '*');
+        self.draw_edge(terminal, self.edges[9].0, self.edges[9].1, '*');
+        self.draw_edge(terminal, self.edges[10].0, self.edges[10].1, '*');
+        self.draw_edge(terminal, self.edges[11].0, self.edges[11].1, '*');
     }
 
-    fn draw_edge(&self, terminal: &Terminal, i: usize, j: usize) {
+    fn draw_edge(&self, terminal: &Terminal, i: usize, j: usize, c: char) {
         let mut x1 = self.vertices_2d[i].x;
         let mut y1 = self.vertices_2d[i].y;
         let x2 = self.vertices_2d[j].x;
         let y2 = self.vertices_2d[j].y;
-
-        // let m = (y2 - y1) / (x2 - x1);
-
-        // if m > 1.0 {
-        //     let temp = x1;
-        //     x1 = y1;
-        //     y1 = temp;
-        //     let temp = x2;
-        //     x2 = y2;
-        //     y2 = temp;
-        // }
-        // if x1 > x2 {
-        //     let temp = x1;
-        //     x1 = x2;
-        //     x2 = temp;
-        //     let temp = y1;
-        //     y1 = y2;
-        //     y2 = temp;
-        // }
 
         let dx = (x2 - x1).abs();
         let dy = (y2 - y1).abs();
@@ -198,7 +182,7 @@ impl Cube {
                 err += dx;
                 y1 += sy as f32;
             }
-            terminal.draw(x1, y1, 0.0);
+            terminal.draw(x1, y1, c);
         }
     }
 

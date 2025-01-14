@@ -11,7 +11,6 @@ fn handle_input() -> bool {
     if event::poll(Duration::from_millis(1)).unwrap() {
         if let Event::Key(key_event) = event::read().unwrap() {
             if key_event.code == KeyCode::Char('d') && key_event.modifiers.contains(KeyModifiers::CONTROL) {
-                println!("Exiting...");
                 return true;
             }
         }

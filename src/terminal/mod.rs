@@ -1,8 +1,5 @@
-use crossterm::{execute, cursor::{Hide, Show}, terminal::{disable_raw_mode, enable_raw_mode, size, Clear, ClearType, SetSize}};
+use crossterm::{execute, cursor::{Hide, Show}, terminal::{disable_raw_mode, enable_raw_mode, size, Clear, ClearType}};
 use std::io::{self, Write};
-
-const TERMINAL_WIDTH: f32 = 188.0;
-const TERMINAL_HEIGHT: f32 = 45.0;
 
 pub struct Terminal {
     cols: u16,
@@ -19,17 +16,17 @@ impl Terminal {
     }
     pub fn initiate_terminal(&self) {
         enable_raw_mode().unwrap();
-        execute!(io::stdout(), Hide, Clear(ClearType::All), SetSize(TERMINAL_WIDTH as u16, TERMINAL_HEIGHT as u16)).unwrap();
+        execute!(io::stdout(), Hide, Clear(ClearType::All)).unwrap();
     }
     
     pub fn clear_terminal(&self) {
-        execute!(io::stdout(), Show, Clear(ClearType::All), SetSize(self.cols, self.rows)).unwrap();
+        execute!(io::stdout(), Show, Clear(ClearType::All)).unwrap();
         disable_raw_mode().unwrap();
     }
 
-    pub fn draw(&self, x: f32, y: f32, z: f32) {
-        let resized_x: u16 = (x + (TERMINAL_WIDTH / 2.0)).floor() as u16;
-        let resized_y: u16 = (y + (TERMINAL_HEIGHT / 2.0)).floor() as u16;
+    pub fn draw(&self, x: f32, y: f32, c: char) {
+        let resized_x: u16 = (x + (self.cols / 2) as f32).floor() as u16;
+        let resized_y: u16 = (y + (self.rows / 2) as f32).floor() as u16;
         // let c;
         // if z < -0.5 {
         //     c = '#';
@@ -40,7 +37,7 @@ impl Terminal {
         // } else {
         //     c = '.';
         // }
-        execute!(io::stdout(), crossterm::cursor::MoveTo(resized_x, resized_y), crossterm::style::Print('*')).unwrap();
+        execute!(io::stdout(), crossterm::cursor::MoveTo(resized_x, resized_y), crossterm::style::Print(c)).unwrap();
     }
 
     pub fn clear(&self) {
