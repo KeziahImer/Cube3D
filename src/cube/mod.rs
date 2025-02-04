@@ -16,21 +16,21 @@ struct Point3D {
     z: f32,
 }
 
-struct Rotation {
-    x: f32,
-    y: f32,
-    z: f32,
+pub struct Rotation {
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
 }
 
 pub struct Cube {
     vertices_2d: Vec<Point2D>,
     vertices_3d: Vec<Point3D>,
     edges: Vec<(usize, usize)>,
-    rotation: Rotation,
+    pub rotation: Rotation,
 }
 
 impl Cube {
-    pub fn new() -> Cube {
+    pub fn new(auto: bool) -> Cube {
         Cube {
             vertices_2d: vec![
                 Point2D { x: 0.0, y: 0.0 },
@@ -67,17 +67,14 @@ impl Cube {
                 (3, 7),
             ],
             rotation: Rotation {
-                x: PI / 360.0,
-                y: PI / 360.0,
-                z: PI / 360.0,
+                x: if auto { PI / 360.0 } else { 0.0 },
+                y: if auto { PI / 360.0 } else { 0.0 },
+                z: if auto { PI / 360.0 } else { 0.0 },
             }
         }
     }
 
     pub fn update(&mut self) {
-        self.rotation.x += 0.000003;
-        self.rotation.y += 0.000002;
-        self.rotation.z += 0.000001;
         self.rotate();
         self.project();
     }
