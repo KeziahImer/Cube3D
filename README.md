@@ -6,6 +6,7 @@ To run in manual mode :
 
 ```cargo run -- manual```
 
+
 In manual mode :
 
 Use e/r keys to manipulate rotation around x-axis
